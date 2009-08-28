@@ -4,5 +4,5 @@ require File.join(File.dirname(__FILE__), 'people_places_things', 'ansi_counties
 require File.join(File.dirname(__FILE__), 'people_places_things', 'phone_number', 'phone_number')
 
 module PeoplePlacesThings
-  VERSION = '1.1.1'
+  VERSION = '1.1.2'
 end
