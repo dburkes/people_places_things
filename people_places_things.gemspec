@@ -2,7 +2,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{people_places_things}
-  s.version = "1.1.0"
+  s.version = "1.1.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danny Burkes"]
@@ -12,7 +12,12 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README.rdoc"
   ]
-  s.files = Dir['lib/**/*'] + Dir['bin/*'] + Dir['[A-Z]*'] + Dir['spec/**/*']
+  
+  s.files = Dir['lib/**/*']
+  s.files << Dir['bin/*']
+  s.files << Dir['[A-Z]*']
+  s.files << Dir['spec/**/*']
+  
   s.has_rdoc = true
   s.homepage = %q{http://github.com/dburkes/people_places_things}
   s.rdoc_options = ["--charset=UTF-8"]
