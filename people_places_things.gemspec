@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{people_places_things}
-  s.version = "1.1.3"
+  s.version = "1.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danny Burkes"]
@@ -28,12 +28,14 @@ Gem::Specification.new do |s|
      "lib/people_places_things/person_name/person_name.rb",
      "lib/people_places_things/phone_number/phone_number.rb",
      "lib/people_places_things/street_address/street_address.rb",
+     "lib/people_places_things/zip_code/zip_code.rb",
      "people_places_things.gemspec",
      "spec/ansi_counties_spec.rb",
      "spec/helper.rb",
      "spec/person_name_spec.rb",
      "spec/phone_number_spec.rb",
-     "spec/street_address_spec.rb"
+     "spec/street_address_spec.rb",
+     "spec/zip_code_spec.rb"
   ]
   s.has_rdoc = true
   s.homepage = %q{http://github.com/dburkes/people_places_things}
@@ -46,7 +48,8 @@ Gem::Specification.new do |s|
      "spec/helper.rb",
      "spec/person_name_spec.rb",
      "spec/phone_number_spec.rb",
-     "spec/street_address_spec.rb"
+     "spec/street_address_spec.rb",
+     "spec/zip_code_spec.rb"
   ]
 
   if s.respond_to? :specification_version then

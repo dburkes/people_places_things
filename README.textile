@@ -31,6 +31,19 @@ h2. Using PeoplePlacesThings
   ANSICounties.code_for('GA', 'FULTON') => 13121
   ANSICounties.code_for(:state => 'ga', :county => 'fulton') => 13121
   ANSICounties.data_for(13121) => { :state => 'GA', :county => 'FULTON' }
+  
+  phone = PhoneNumber.parse '14045551212'
+  phone.country_code => 1
+  phone.area_code => '404'
+  phone.number => '5551212'
+  phone.exchange => '555'
+  phone.suffix => '1212'
+  phone.to_s => '1 (404) 555-1212'
+
+  zip = ZipCode.parse '30306-3522'
+  zip.base => '30306'
+  zip.plus_four => '3522'
+  zip.to_s => '30306-3522'
 </code></pre>
 
 h2. Data source
