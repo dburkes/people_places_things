@@ -1,9 +1,9 @@
-PeoplePlacesThings
-=
+h1. PeoplePlacesThings
+
 PeoplePlacesThings is a collection of ruby classes for parsing and formatting U.S person names, street addresses, phone numbers, and more.
 
-Using PeoplePlacesThings
-=
+h2. Using PeoplePlacesThings
+
   require 'people_places_things'
 
   name = PersonName.parse("george quincy harold peabody jr.")
@@ -31,8 +31,8 @@ Using PeoplePlacesThings
   ANSICounties.code_for(:state => 'ga', :county => 'fulton') => 13121
   ANSICounties.data_for(13121) => { :state => 'GA', :county => 'FULTON' }
 
-Data source
-=
-The data that makes up `lib/people_places_things/ansi_counties/data/data.yml` was generated from `lib/people_places_things/ansi_counties/data/raw.txt`, which was downloaded from [the US Census website](http://www.census.gov/geo/www/ansi/download.html).
+h2. Data source
+
+The data that makes up @lib/people_places_things/ansi_counties/data/data.yml@ was generated from @lib/people_places_things/ansi_counties/data/raw.txt@, which was downloaded from "the US Census website":http://www.census.gov/geo/www/ansi/download.html.
     
     
