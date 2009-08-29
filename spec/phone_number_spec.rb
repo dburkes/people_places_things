@@ -33,7 +33,27 @@ describe PhoneNumber do
     phone.suffix.should == '1212'
   end
   
-  it "should throw exception on unsupported format" do
+  it "should throw exception on unsupported parse format" do
     lambda { PhoneNumber.parse('40455512') }.should raise_error
+  end
+  
+  it "should format :full_digits" do
+    PhoneNumber.parse('14045551212').to_s(:full_digits).should == '14045551212'
+  end
+
+  it "should format :local_digits" do
+    PhoneNumber.parse('14045551212').to_s(:local_digits).should == '5551212'
+  end
+
+  it "should format :full_formatted" do
+    PhoneNumber.parse('14045551212').to_s(:full_formatted).should == '1 (404) 555-1212'
+  end
+
+  it "should format :local_formatted" do
+    PhoneNumber.parse('14045551212').to_s(:local_formatted).should == '555-1212'
+  end
+
+  it "should throw exception on unsupported to_sformat" do
+    lambda { PhoneNumber.parse('14045551212').to_s(:bogus) }.should raise_error
   end
 end
