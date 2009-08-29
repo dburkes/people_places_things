@@ -4,6 +4,7 @@ PeoplePlacesThings is a collection of ruby classes for parsing and formatting U.
 
 h2. Using PeoplePlacesThings
 
+<pre><code>
   require 'people_places_things'
 
   name = PersonName.parse("george quincy harold peabody jr.")
@@ -30,6 +31,7 @@ h2. Using PeoplePlacesThings
   ANSICounties.code_for('GA', 'FULTON') => 13121
   ANSICounties.code_for(:state => 'ga', :county => 'fulton') => 13121
   ANSICounties.data_for(13121) => { :state => 'GA', :county => 'FULTON' }
+</code></pre>
 
 h2. Data source
 
