@@ -2,21 +2,21 @@ require 'spec/helper'
 
 describe StreetAddress do
   it "should parse number street" do
-    addr = StreetAddress.parse "123 Main Street"
+    addr = StreetAddress.new "123 Main Street"
     addr.number.should == '123'
     addr.name.should == 'Main'
     addr.suffix.should == :street
   end
   
   it "should parse number with letter" do
-    addr = StreetAddress.parse "204-B Main Street"
+    addr = StreetAddress.new "204-B Main Street"
     addr.number.should == '204-B'
     addr.name.should == 'Main'
     addr.suffix.should == :street
   end
   
   it "should parse pre direction" do 
-    addr = StreetAddress.parse "123 E Main Street"
+    addr = StreetAddress.new "123 E Main Street"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'Main'
@@ -24,7 +24,7 @@ describe StreetAddress do
   end
 
   it "should parse post direction" do 
-    addr = StreetAddress.parse "123 Main Street NE"
+    addr = StreetAddress.new "123 Main Street NE"
     addr.number.should == '123'
     addr.name.should == 'Main'
     addr.suffix.should == :street
@@ -32,7 +32,7 @@ describe StreetAddress do
   end
   
   it "should parse pre and post direction" do 
-    addr = StreetAddress.parse "123 E Main Street North"
+    addr = StreetAddress.new "123 E Main Street North"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'Main'
@@ -41,7 +41,7 @@ describe StreetAddress do
   end
   
   it "should parse street names that look like directions" do 
-    addr = StreetAddress.parse "123 E E St"
+    addr = StreetAddress.new "123 E E St"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'E'
@@ -49,7 +49,7 @@ describe StreetAddress do
   end
 
   it "should parse street names that look like directions, with post directions" do 
-    addr = StreetAddress.parse "123 E E St NE"
+    addr = StreetAddress.new "123 E E St NE"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'E'
@@ -58,7 +58,7 @@ describe StreetAddress do
   end
   
   it "should parse abbreviations" do 
-    addr = StreetAddress.parse "123 e. 1st ave"
+    addr = StreetAddress.new "123 e. 1st ave"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == '1st'
@@ -66,7 +66,7 @@ describe StreetAddress do
   end
   
   it "should parse suites" do
-    addr = StreetAddress.parse "123 E E St NE Ste 23"
+    addr = StreetAddress.new "123 E E St NE Ste 23"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'E'
@@ -77,7 +77,7 @@ describe StreetAddress do
   end
 
   it "should parse apartments" do
-    addr = StreetAddress.parse "123 E E St NE Apartment 4"
+    addr = StreetAddress.new "123 E E St NE Apartment 4"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'E'
@@ -88,7 +88,7 @@ describe StreetAddress do
   end
   
   it "should parse numbers" do
-    addr = StreetAddress.parse '123 E E St NE # 5'
+    addr = StreetAddress.new '123 E E St NE # 5'
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'E'
@@ -99,34 +99,34 @@ describe StreetAddress do
   end
   
   it "should parse no number" do 
-    addr = StreetAddress.parse "Westside Highway"
+    addr = StreetAddress.new "Westside Highway"
     addr.number.should == nil
     addr.name.should == 'Westside'
     addr.suffix.should == :highway
   end
 
   it "should parse directional street with suffix" do 
-    addr = StreetAddress.parse "12 north avenue"
+    addr = StreetAddress.new "12 north avenue"
     addr.number.should == '12'
     addr.name.should == 'north'
     addr.suffix.should == :avenue
   end
   
   it "should parse directional street without suffix" do 
-    addr = StreetAddress.parse "12 north"
+    addr = StreetAddress.new "12 north"
     addr.number.should == '12'
     addr.name.should == 'north'
   end
 
   it "should parse directional street with postdir" do 
-    addr = StreetAddress.parse "12 north w"
+    addr = StreetAddress.new "12 north w"
     addr.number.should == '12'
     addr.name.should == 'north'
     addr.post_direction.should == :west
   end
   
   it "should parse directional street with postdir and unit" do 
-    addr = StreetAddress.parse "12 n sw apt. 2"
+    addr = StreetAddress.new "12 n sw apt. 2"
     addr.number.should == '12'
     addr.name.should == 'n'
     addr.post_direction.should == :southwest
@@ -135,7 +135,7 @@ describe StreetAddress do
   end
   
   it "should handle commas" do
-    addr = StreetAddress.parse "123 E E St NE, suite 23"
+    addr = StreetAddress.new "123 E E St NE, suite 23"
     addr.number.should == '123'
     addr.pre_direction.should == :east
     addr.name.should == 'E'

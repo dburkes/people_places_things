@@ -1,33 +1,22 @@
 class StreetAddress
-  @@SUPPORTED_PARTS = [:number, :pre_direction, :name, :suffix, :post_direction, :unit_type, :unit]
-  @@SUPPORTED_PARTS.each {|attr| attr_accessor attr}
-  attr_accessor :raw
+  attr_accessor :number, :pre_direction, :name, :suffix, :post_direction, :unit_type, :unit, :raw
   
-  def initialize(parts={})
-    parts.keys.each do |k|
-      send("#{k}=", parts[k]) if @@SUPPORTED_PARTS.include?(k)
-    end
-    
-    validate_parts
-  end
-  
-  def self.parse(string)
-    tokens = string.split(/[\s,]/).select {|s| !s.empty?}
-    parts = {}
+  def initialize(str)
+    tokens = str.split(/[\s,]/).select {|s| !s.empty?}
     
     # Check the first token for leading numericality.  If so, set number to the first token, and delete it
     #
     if tokens.first =~ /(^\d+.*)/
-      parts[:number] = $1
+      self.number = $1
       tokens.shift
     end
     
     # If at least two tokens remain, check next-to-last token as unit type.  If so, set unit_type and unit, and delete the tokens
     #
     if tokens.size > 1 
-      parts[:unit_type] = find_token(tokens[-2], UNIT_TYPES)
-      if parts[:unit_type]
-        parts[:unit] = tokens[-1]
+      self.unit_type = StreetAddress.find_token(tokens[-2], UNIT_TYPES)
+      if self.unit_type
+        self.unit = tokens[-1]
         tokens.slice!(tokens.size - 2, 2)
       end
     end
@@ -35,8 +24,8 @@ class StreetAddress
     # If at least one token remains, check last token for directionality.  If so, set post_direction and delete the token
     #
     if tokens.size > 0
-      parts[:post_direction] = find_token(tokens[-1], DIRECTIONS)
-      if parts[:post_direction]
+      self.post_direction = StreetAddress.find_token(tokens[-1], DIRECTIONS)
+      if self.post_direction
         post_direction_token = tokens[-1]
         tokens.slice!(tokens.size - 1)
       end
@@ -45,33 +34,27 @@ class StreetAddress
     # If at least one token remains, check last token for suffix.  If so, self set.suffix and delete the token
     #
     if tokens.size > 0
-      parts[:suffix] = find_token(tokens[-1], SUFFIXES)
-      tokens.slice!(tokens.size - 1) if parts[:suffix]
+      self.suffix = StreetAddress.find_token(tokens[-1], SUFFIXES)
+      tokens.slice!(tokens.size - 1) if self.suffix
     end
     
     # If at least two tokens remain, check first for directionality. If so, set pre_direction and delete token
     #
     if tokens.size > 1
-      parts[:pre_direction] = find_token(tokens.first, DIRECTIONS)
-      tokens.shift if parts[:pre_direction]
+      self.pre_direction = StreetAddress.find_token(tokens.first, DIRECTIONS)
+      tokens.shift if self.pre_direction
     end
     
     # if any tokens remain, set joined remaining tokens as name, otherwise, set name to post_direction, if set, and set post_direction to nil
     #
     if tokens.size > 0
-      parts[:name] = tokens.join(' ')
+      self.name = tokens.join(' ')
     else
-      parts[:name] = post_direction_token
-      parts[:post_direction] = nil
+      self.name = post_direction_token
+      self.post_direction = nil
     end
     
-    ret = StreetAddress.new parts
-    ret.raw = string
-    ret
-  end
-  
-  def self.format(parts)
-    StreetAddress.new(parts).to_s
+    validate_parts
   end
   
   def to_s
