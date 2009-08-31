@@ -4,6 +4,7 @@ require File.join(File.dirname(__FILE__), 'people_places_things', 'ansi_counties
 require File.join(File.dirname(__FILE__), 'people_places_things', 'phone_number', 'phone_number')
 require File.join(File.dirname(__FILE__), 'people_places_things', 'zip_code', 'zip_code')
 require File.join(File.dirname(__FILE__), 'people_places_things', 'state', 'state')
+require File.join(File.dirname(__FILE__), 'people_places_things', 'location', 'location')
 
 module PeoplePlacesThings
   VERSION = File.read('VERSION').chomp.strip rescue "Unknown"
