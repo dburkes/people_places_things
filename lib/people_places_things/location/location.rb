@@ -8,12 +8,12 @@ class Location
     
     # try to parse last token as zip
     #
-    self.zip = ZipCode.parse(tokens.last) rescue nil
+    self.zip = ZipCode.new(tokens.last) rescue nil
     tokens = tokens.slice(0..-2) if self.zip
     
     # try to parse last token as state
     #
-    self.state = State.parse(tokens.last) rescue nil
+    self.state = State.new(tokens.last) rescue nil
     tokens = tokens.slice(0..-2) if self.state
     
     # remainder must be city
