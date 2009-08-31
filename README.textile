@@ -7,7 +7,7 @@ h2. Using PeoplePlacesThings
 <pre><code>
   require 'people_places_things'
 
-  name = PersonName.parse("george quincy harold peabody jr.")
+  name = PersonName.new("george quincy harold peabody jr.")
   name.first => "george"
   name.first_i => "g"
   name.last => "peabody"
@@ -16,10 +16,10 @@ h2. Using PeoplePlacesThings
   name.to_s(:last_comma_first) => "peabody,george"
   name.to_s(:full) => "george quincy peabody jr."
 
-  name2 = PersonName.parse("peabody jr., george quincy harold", :last_first_middle)
+  name2 = PersonName.new("peabody jr., george quincy harold", :last_first_middle)
   name.eql?(name2) => true
 
-  addr = StreetAddress.parse("204-b ne. 1st ave suite 4")
+  addr = StreetAddress.new("204-b ne. 1st ave suite 4")
   addr.number => "204-b"
   addr.pre_direction => :northeast
   addr.name => "1st"
@@ -32,7 +32,7 @@ h2. Using PeoplePlacesThings
   ANSICounties.code_for(:state => 'ga', :county => 'fulton') => 13121
   ANSICounties.data_for(13121) => { :state => 'GA', :county => 'FULTON' }
   
-  phone = PhoneNumber.parse '14045551212'
+  phone = PhoneNumber.new '14045551212'
   phone.country_code => 1
   phone.area_code => '404'
   phone.number => '5551212'
@@ -40,12 +40,12 @@ h2. Using PeoplePlacesThings
   phone.suffix => '1212'
   phone.to_s => '1 (404) 555-1212'
 
-  zip = ZipCode.parse '30306-3522'
+  zip = ZipCode.new '30306-3522'
   zip.base => '30306'
   zip.plus_four => '3522'
   zip.to_s => '30306-3522'
   
-  state = State.parse 'california'
+  state = State.new 'california'
   state.sym => :ca
   state.to_s => 'California'
   state.to_s(:abbr) => 'CA'
