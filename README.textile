@@ -53,7 +53,7 @@ h2. Using PeoplePlacesThings
   location = Location.new 'san francisco, ca 94114-1222'
   location.city => 'san francisco'
   location.state.to_s => 'California'
-  location.zip.to_s(:base) => '94114'
+  location.zip.base => '94114'
 </code></pre>
 
 h2. Data source
