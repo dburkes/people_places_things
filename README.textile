@@ -44,6 +44,16 @@ h2. Using PeoplePlacesThings
   zip.base => '30306'
   zip.plus_four => '3522'
   zip.to_s => '30306-3522'
+  
+  state = State.parse 'california'
+  state.sym => :ca
+  state.to_s => 'California'
+  state.to_s(:abbr) => 'CA'
+  
+  location = Location.new 'san francisco, ca 94114-1222'
+  location.city => 'san francisco'
+  location.state.to_s => 'California'
+  location.zip.to_s(:base) => '94114'
 </code></pre>
 
 h2. Data source
