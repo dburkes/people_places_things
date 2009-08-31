@@ -8,6 +8,8 @@ class PersonName
       fmt = str.include?(',') ? :last_first_middle : :first_middle_last
     end
     
+    self.raw = str
+    
     parts = str.split(/\s|,/).collect {|p| p.strip}.reject {|p| PersonName.blank?(p) || p == ',' }
   
     if parts.size == 1

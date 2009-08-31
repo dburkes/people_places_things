@@ -1,31 +1,17 @@
 class State
-  attr_accessor :raw
-  attr_accessor :sym
+  attr_accessor :sym, :raw
   
-  def initialize(sym)
-    raise "Unsupported state" if !FORWARD.has_key?(sym)
-    self.sym = sym
-  end
-  
-  def self.parse(string)
-    token = string.strip.downcase
-    sym = nil
+  def initialize(str)
+    self.raw = str
+    token = str.strip.downcase
     
     if FORWARD.has_key?(token.to_sym)
-      sym = token.to_sym
+      self.sym = token.to_sym
     elsif REVERSE.has_key?(token)
-      sym = REVERSE[token]
+      self.sym = REVERSE[token]
     end
     
-    raise "Unsupported Format" if !sym
-
-    ret = State.new sym
-    ret.raw = string
-    ret
-  end
-  
-  def self.format(sym, fmt)
-    State.new(sym).to_s(fmt)
+    raise "Unsupported Format" if !self.sym
   end
   
   def to_s(fmt = :full)
