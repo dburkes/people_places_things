@@ -6,6 +6,7 @@ h2. Using PeoplePlacesThings
 
 <pre><code>
   require 'people_places_things'
+  include PeoplePlacesThings
 
   name = PersonName.new("george quincy harold peabody jr.")
   name.first => "george"
