@@ -5,7 +5,7 @@
 
 Gem::Specification.new do |s|
   s.name = %q{people_places_things}
-  s.version = "2.1.0"
+  s.version = "2.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Danny Burkes"]
@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "VERSION",
      "lib/people_places_things.rb",
+     "lib/people_places_things/VERSION",
      "lib/people_places_things/ansi_counties.rb",
      "lib/people_places_things/data/data.yml",
      "lib/people_places_things/data/process_data.rb",
