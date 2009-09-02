@@ -59,6 +59,6 @@ h2. Using PeoplePlacesThings
 
 h2. Data source
 
-The data that makes up @lib/people_places_things/ansi_counties/data/data.yml@ was generated from @lib/people_places_things/ansi_counties/data/raw.txt@, which was downloaded from "the US Census website":http://www.census.gov/geo/www/ansi/download.html.
+The data that makes up @lib/people_places_things/data/data.yml@ was generated from @lib/people_places_things/data/raw.txt@, which was downloaded from "the US Census website":http://www.census.gov/geo/www/ansi/download.html.
     
     
