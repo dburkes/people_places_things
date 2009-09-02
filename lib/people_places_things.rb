@@ -7,5 +7,5 @@ require 'people_places_things/state'
 require 'people_places_things/location'
 
 module PeoplePlacesThings
-  VERSION = File.read('people_places_things/VERSION').chomp.strip rescue "Unknown"
+  VERSION = File.read(File.join(File.dirname(__FILE__), 'people_places_things', 'VERSION')).chomp.strip rescue "Unknown"
 end
