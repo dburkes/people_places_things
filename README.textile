@@ -2,7 +2,7 @@ h1. PeoplePlacesThings
 
 PeoplePlacesThings is a collection of ruby classes for parsing and formatting U.S person names, street addresses, phone numbers, and more.
 
-<pre><code>gem install -s http://gemcutter.org people_places_things</code>></pre>
+<pre><code>gem install -s http://gemcutter.org people_places_things</code></pre>
 
 h2. Using PeoplePlacesThings
 
