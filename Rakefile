@@ -16,8 +16,10 @@ task :default => [:specs]
 
 begin
   require 'jeweler'
+  require 'lib/people_places_things'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "people_places_things"
+    gemspec.version = PeoplePlacesThings::VERSION
     gemspec.summary = "Parsers and formatters for person names, street addresses, city/state/zip, phone numbers, etc."
     gemspec.email = "dburkes@netable.com"
     gemspec.homepage = "http://github.com/dburkes/people_places_things"
