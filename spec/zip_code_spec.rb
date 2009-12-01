@@ -24,4 +24,8 @@ describe ZipCode do
   it "should throw exception on unsupported to_s format" do
     lambda { ZipCode.new('30306-3522').to_s(:bogus) }.should raise_error
   end
+  
+  it "should save raw format" do
+    ZipCode.new('30306-3522').raw.should == '30306-3522'
+  end
 end

@@ -172,4 +172,8 @@ describe PersonName do
     name.middle.should == 'quincy drake'
     name.last.should == 'peabody'
   end
+  
+  it "should save raw" do
+    PersonName.new("ronald mcdonald").raw.should == 'ronald mcdonald'
+  end
 end

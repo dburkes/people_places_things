@@ -156,4 +156,8 @@ describe StreetAddress do
   it "should support short form when none exists" do
     StreetAddress.string_for(:oaks, :short).should == StreetAddress.string_for(:oaks, :long)
   end
+  
+  it "should save raw" do
+    StreetAddress.new('123 Main st.').raw.should == '123 Main st.'
+  end
 end

@@ -3,6 +3,7 @@ module PeoplePlacesThings
     attr_accessor :number, :pre_direction, :name, :suffix, :post_direction, :unit_type, :unit, :raw
   
     def initialize(str)
+      self.raw = str
       tokens = str.split(/[\s,]/).select {|s| !s.empty?}
     
       # Check the first token for leading numericality.  If so, set number to the first token, and delete it

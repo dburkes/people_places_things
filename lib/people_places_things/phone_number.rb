@@ -3,6 +3,7 @@ module PeoplePlacesThings
     attr_accessor :country_code, :area_code, :number, :exchange, :suffix, :raw
   
     def initialize(str)
+      self.raw = str
       extract = str.strip.match(/^([-+()\d ]+)$/)[0].gsub(/[^\d]/, '') rescue nil
       raise "Unsupported Format" if !extract || extract.length < 10 || extract.length > 11
 

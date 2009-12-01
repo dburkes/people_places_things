@@ -56,4 +56,8 @@ describe PhoneNumber do
   it "should throw exception on unsupported to_sformat" do
     lambda { PhoneNumber.new('14045551212').to_s(:bogus) }.should raise_error
   end
+  
+  it "should save raw" do
+    PhoneNumber.new('14045551212').raw.should == '14045551212'
+  end
 end

@@ -26,4 +26,8 @@ describe State do
   it "should throw exception on unsupported to_s format" do
     lambda { State.new('ga').to_s(:bogus) }.should raise_error
   end
+  
+  it "should save raw" do
+    State.new('georgia').raw.should == 'georgia'
+  end
 end

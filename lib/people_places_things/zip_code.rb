@@ -3,6 +3,7 @@ module PeoplePlacesThings
     attr_accessor :base, :plus_four, :raw
   
     def initialize(str)
+      self.raw = str
       tokens = str.strip.match(/^(\d{5})(-\d{4})?$/)[0].split('-') rescue nil
       raise "Unsupported Format" if !tokens
 

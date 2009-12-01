@@ -41,6 +41,10 @@ describe Location do
     test_location("94114-1212", nil, nil, '94114-1212')
   end
   
+  it "should save raw" do 
+    Location.new('san francisco, ca').raw.should == 'san francisco, ca'
+  end
+  
   private
   
   def test_location(str, city, state, zip)
