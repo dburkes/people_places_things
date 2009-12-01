@@ -7,5 +7,5 @@ require 'people_places_things/state'
 require 'people_places_things/location'
 
 module PeoplePlacesThings
-  VERSION = "2.3.0"
+  VERSION = "2.3.1"
 end
