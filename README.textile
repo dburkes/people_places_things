@@ -4,6 +4,8 @@ PeoplePlacesThings is a collection of ruby classes for parsing and formatting U.
 
 <pre><code>gem install -s http://gemcutter.org people_places_things</code></pre>
 
+Rdocs available at "http://rdoc.info/projects/dburkes/people_places_things":http://rdoc.info/projects/dburkes/people_places_things
+
 h2. Using PeoplePlacesThings
 
 <pre><code>
