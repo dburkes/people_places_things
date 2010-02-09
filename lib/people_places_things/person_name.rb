@@ -18,7 +18,7 @@ module PeoplePlacesThings
       else
         case fmt
           when :first_middle_last
-            if parts.size > 2 and SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts.last) == 0}
+            if parts.size > 2 && SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts.last) == 0}
               self.suffix = PersonName.normalize_suffix(parts.last)
               parts.delete_at(parts.size - 1)
             end
@@ -41,7 +41,7 @@ module PeoplePlacesThings
               parts.delete_at(1)
             end
 
-            if parts.size > 2 and SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts[1]) == 0}
+            if parts.size > 2 && SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts[1]) == 0}
               self.suffix = PersonName.normalize_suffix(parts[1])
               parts.delete_at(1)
             end
