@@ -45,6 +45,14 @@ describe PersonName do
     name.suffix.should == 'jr'
   end
   
+  it "should parse last first middle suffix" do
+    name = PersonName.new "peabody, george f., jr.", :last_first_middle
+    name.first.should == 'george'
+    name.middle.should == 'f.'
+    name.last.should == 'peabody'
+    name.suffix.should == 'jr'
+  end
+
   it "should default to first_middle_last" do
     name = PersonName.new "george quincy drake peabody"
     name.first.should == 'george'
