@@ -120,7 +120,7 @@ module PeoplePlacesThings
       suffix.match(/\w+/)[0] rescue suffix
     end
   
-    SUPPORTED_SUFFIXES = %w(II III IV V JR JR. SR SR.)
+    SUPPORTED_SUFFIXES = %w(II III IV JR JR. SR SR.)
     ODD_LAST_NAME_PREFIXES = %w(MC ST ST.)
   end
 end
