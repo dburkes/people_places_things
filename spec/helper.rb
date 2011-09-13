@@ -1,2 +1,0 @@
-require 'lib/people_places_things'
-include PeoplePlacesThings
