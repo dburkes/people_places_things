@@ -5,7 +5,4 @@ require 'people_places_things/phone_number'
 require 'people_places_things/zip_code'
 require 'people_places_things/state'
 require 'people_places_things/location'
-
-module PeoplePlacesThings
-  VERSION = "2.4.1"
-end
+require 'people_places_things/version'

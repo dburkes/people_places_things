@@ -1,3 +1,4 @@
-doc
 *.tmproj
-*.gem
+.bundle
+.rvmrc
+Gemfile.lock
