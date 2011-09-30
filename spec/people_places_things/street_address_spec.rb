@@ -157,6 +157,16 @@ describe StreetAddress do
     StreetAddress.string_for(:oaks, :short).should == StreetAddress.string_for(:oaks, :long)
   end
   
+  it "should handle postal standards" do
+    addr = StreetAddress.new "100 Back ALY"
+    addr.suffix.should == :alley
+  end
+  
+  it "shoud output postal standard" do
+    addr = StreetAddress.new "100 East Woodside Crossing S.W."
+    addr.to_postal_s.should == "100 e Woodside xing sw"
+  end
+  
   it "should save raw" do
     StreetAddress.new('123 Main st.').raw.should == '123 Main st.'
   end
