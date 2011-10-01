@@ -1,7 +1,7 @@
 require 'pry'
 module PeoplePlacesThings
   class StreetAddress
-    attr_accessor :number, :pre_direction, :name, :suffix, :post_direction, :unit_type, :unit, :raw
+    attr_accessor :number, :pre_direction, :ordinal, :name, :suffix, :post_direction, :unit_type, :unit, :raw
   
     def initialize(str)
       self.raw = str
@@ -48,6 +48,13 @@ module PeoplePlacesThings
         tokens.shift if self.pre_direction
       end
     
+      # If at least one token remains, check for ordinal
+      #
+      if tokens.size > 0
+        self.ordinal = StreetAddress.find_token(tokens.first, ORDINALS)
+        tokens.shift if self.ordinal
+      end
+      
       # if any tokens remain, set joined remaining tokens as name, otherwise, set name to post_direction, if set, and set post_direction to nil
       #
       if tokens.size > 0
@@ -64,6 +71,7 @@ module PeoplePlacesThings
       parts = []
       parts << self.number if self.number
       parts << DIRECTIONS[self.pre_direction].first if self.pre_direction
+      parts << ORDINALS[self.ordinal].first if self.ordinal
       parts << self.name if self.name
       parts << SUFFIXES[self.suffix].first if self.suffix
       parts << DIRECTIONS[self.post_direction].first if self.post_direction
@@ -76,6 +84,7 @@ module PeoplePlacesThings
       parts = []
       parts << self.number if self.number
       parts << StreetAddress.string_for(self.pre_direction, :short) if self.pre_direction
+      parts << StreetAddress.string_for(self.ordinal, :short) if self.ordinal
       parts << self.name if self.name
       parts << StreetAddress.string_for(self.suffix, :short) if self.suffix
       parts << StreetAddress.string_for(self.post_direction, :short) if self.post_direction
@@ -87,7 +96,7 @@ module PeoplePlacesThings
     def self.string_for(symbol, form)
       raise "Requested unknown form \"#{type}\" for :#{symbol}" if !SUPPORTED_FORMS.include?(form)
     
-      val = DIRECTIONS[symbol] || SUFFIXES[symbol] || UNIT_TYPES[symbol]
+      val = DIRECTIONS[symbol] || SUFFIXES[symbol] || UNIT_TYPES[symbol] || ORDINALS[symbol]
 
       if val
         val = ((val[SUPPORTED_FORMS.index(form)] rescue nil) || (val.first rescue val))
@@ -348,7 +357,28 @@ module PeoplePlacesThings
       :space      => %w(space spc),
       :stop       => %w(stop stop),
       :unit       => %w(unit unit)
-
+    }
+    
+    ORDINALS = {
+      :first => %w(first 1st),
+      :second => %w(second 2nd),
+      :third => %w(third 3rd),
+      :fourth => %w(fourth 4th forth),
+      :fifth => %w(fifth 5th),
+      :sixth => %w(sixth 6th),
+      :seventh => %w(seventh 7th),
+      :eighth => %w(eighth 8th),
+      :ninth => %w(ninth 9th),
+      :tenth => %w(tenth 10th),
+      :eleventh => %w(eleventh 11th),
+      :twelfth => %w(twelfth 12th),
+      :thirteenth => %w(thirteenth 13th),
+      :fourteenth => %w(fourteenth 14th),
+      :fifteenth => %w(fifteenth 15th),
+      :sixteenth => %w(sixteenth 16th),
+      :seventeenth => %w(seventeenth 17th),
+      :eighteenth => %w(eighteenth 18th),
+      :nineteenth => %w(nineteenth 19th)
     }
   
     # to_postal_s format uses the short form

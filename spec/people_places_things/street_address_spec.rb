@@ -61,8 +61,16 @@ describe StreetAddress do
     addr = StreetAddress.new "123 e. 1st ave"
     addr.number.should == '123'
     addr.pre_direction.should == :east
-    addr.name.should == '1st'
+    addr.ordinal.should == :first
     addr.suffix.should == :avenue
+  end
+  
+  it "should parse ordinal and name" do
+    addr = StreetAddress.new "123 1st East ave"
+    addr.number.should == '123'
+    addr.name.should == 'East'
+    addr.ordinal.should == :first
+    addr.suffix.should == :avenue    
   end
   
   it "should parse suites" do
@@ -162,9 +170,19 @@ describe StreetAddress do
     addr.suffix.should == :alley
   end
   
+  it "should output postal standard ordinals" do
+    addr = StreetAddress.new "100 First St"
+    addr.to_postal_s.should == "100 1st st"
+  end
+  
   it "shoud output postal standard" do
     addr = StreetAddress.new "100 East Woodside Crossing S.W."
     addr.to_postal_s.should == "100 e Woodside xing sw"
+  end
+  
+  it "should allow empty" do
+    addr = StreetAddress.new " "
+    addr.to_postal_s.empty?.should == true
   end
   
   it "should save raw" do
