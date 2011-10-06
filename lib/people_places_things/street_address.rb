@@ -1,7 +1,7 @@
 require 'pry'
 module PeoplePlacesThings
   class StreetAddress
-    attr_accessor :number, :pre_direction, :ordinal, :name, :suffix, :post_direction, :unit_type, :unit, :raw
+    attr_accessor :number, :pre_direction, :ordinal, :name, :suffix, :post_direction, :unit_type, :unit, :po_box, :raw
   
     def initialize(str)
       self.raw = str
@@ -21,9 +21,15 @@ module PeoplePlacesThings
         if self.unit_type
           self.unit = tokens[-1]
           tokens.slice!(tokens.size - 2, 2)
+          if tokens.size > 0
+            # see if unit_type is specified twice i.e. Suite # 
+            if StreetAddress.find_token(tokens[-1], UNIT_TYPES)
+              tokens.slice!(tokens.size - 1)
+            end
+          end
         end
       end
-    
+        
       # If at least one token remains, check last token for directionality.  If so, set post_direction and delete the token
       #
       if tokens.size > 0
@@ -34,7 +40,7 @@ module PeoplePlacesThings
         end
       end
     
-      # If at least one token remains, check last token for suffix.  If so, self set.suffix and delete the token
+      # If at least one token remains, check last token for suffix.  If so, set suffix and delete the token
       #
       if tokens.size > 0
         self.suffix = StreetAddress.find_token(tokens[-1], SUFFIXES)
@@ -55,8 +61,14 @@ module PeoplePlacesThings
         tokens.shift if self.ordinal
       end
       
+      # Check for a PO Box pattern and extract the po_box
+      if tokens.size > 2 && self.number == nil && (tokens.join(' ') =~ PO_BOX_PATTERN || tokens.join(' ') =~ RR_PATTERN)
+        self.po_box = tokens[-1]
+        tokens.slice!(tokens.size - 1)
+      end
+
       # if any tokens remain, set joined remaining tokens as name, otherwise, set name to post_direction, if set, and set post_direction to nil
-      #
+      #      
       if tokens.size > 0
         self.name = tokens.join(' ')
       else
@@ -67,12 +79,18 @@ module PeoplePlacesThings
       validate_parts
     end
   
+    # check for a valid street address, we assume at least a number or po_box and name is required.
+    def valid?
+      !self.name.nil? && !(self.number.nil? && self.po_box.nil?)
+    end
+    
     def to_s
       parts = []
       parts << self.number if self.number
       parts << DIRECTIONS[self.pre_direction].first if self.pre_direction
       parts << ORDINALS[self.ordinal].first if self.ordinal
       parts << self.name if self.name
+      parts << self.po_box if self.po_box
       parts << SUFFIXES[self.suffix].first if self.suffix
       parts << DIRECTIONS[self.post_direction].first if self.post_direction
       parts << UNIT_TYPES[self.unit_type].first if self.unit_type
@@ -80,17 +98,21 @@ module PeoplePlacesThings
       parts.join(' ')
     end
 
-    def to_postal_s
+    # to_canonical_s 
+    # format the address in a postal service canonical format
+    def to_canonical_s
       parts = []
-      parts << self.number if self.number
-      parts << StreetAddress.string_for(self.pre_direction, :short) if self.pre_direction
-      parts << StreetAddress.string_for(self.ordinal, :short) if self.ordinal
-      parts << self.name if self.name
-      parts << StreetAddress.string_for(self.suffix, :short) if self.suffix
-      parts << StreetAddress.string_for(self.post_direction, :short) if self.post_direction
-      parts << StreetAddress.string_for(self.unit_type, :short) if self.unit_type
-      parts << StreetAddress.string_for(self.unit, :short) if self.unit
-      parts.join(' ')
+      parts << self.number.upcase if self.number
+      parts << StreetAddress.string_for(self.pre_direction, :short).upcase if self.pre_direction
+      parts << StreetAddress.string_for(self.ordinal, :short).upcase if self.ordinal
+      parts << self.name.gsub(/[(,?!\'":.)]/, '').gsub(PO_BOX_PATTERN, 'PO BOX').upcase if self.name
+      parts << self.po_box if self.po_box
+      parts << StreetAddress.string_for(self.suffix, :short).upcase if self.suffix
+      parts << StreetAddress.string_for(self.post_direction, :short).upcase if self.post_direction
+      # make all unit type as the canoncial number "#"
+      parts << StreetAddress.string_for(:number, :short).upcase if self.unit_type
+      parts << self.unit.upcase if self.unit
+      parts.join(' ')      
     end
   
     def self.string_for(symbol, form)
@@ -124,7 +146,10 @@ module PeoplePlacesThings
       nil
     end
   
-    # to_postal_s uses the short version of each of the following
+    PO_BOX_PATTERN = /(p.o. box|p o box|post office box|po box)/i
+    RR_PATTERN = /rr[\s*]([#]\d+|\d+)(\s*-\s*|\s*)box[\s*]([#]\d+|\d+)/i
+    
+    # to_canonical_s uses the short version of each of the following
     # long version is in position 0
     # short version is in position 1 
     
@@ -381,7 +406,7 @@ module PeoplePlacesThings
       :nineteenth => %w(nineteenth 19th)
     }
   
-    # to_postal_s format uses the short form
+    # to_canonical_s format uses the short form
     SUPPORTED_FORMS = [:long, :short]
   end
 end
