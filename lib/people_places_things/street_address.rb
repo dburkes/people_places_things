@@ -1,7 +1,6 @@
-require 'pry'
 module PeoplePlacesThings
   class StreetAddress
-    attr_accessor :number, :pre_direction, :ordinal, :name, :suffix, :post_direction, :unit_type, :unit, :po_box, :raw
+    attr_accessor :number, :pre_direction, :ordinal, :name, :suffix, :post_direction, :unit_type, :unit, :box_number, :raw
   
     def initialize(str)
       self.raw = str
@@ -57,14 +56,13 @@ module PeoplePlacesThings
       # If at least one token remains, check for ordinal
       #
       if tokens.size > 0
-        self.ordinal = StreetAddress.find_token(tokens.first, ORDINALS)
-        tokens.shift if self.ordinal
+        self.ordinal = tokens.first if StreetAddress.find_token(tokens.first, ORDINALS)
       end
       
-      # Check for a PO Box pattern and extract the po_box
+      # Check for a PO Box / Rural Route pattern and extract the box_number
+      #
       if tokens.size > 2 && self.number == nil && (tokens.join(' ') =~ PO_BOX_PATTERN || tokens.join(' ') =~ RR_PATTERN)
-        self.po_box = tokens[-1]
-        tokens.slice!(tokens.size - 1)
+        self.box_number = tokens[-1].gsub(/[(,?!\'":.#)]/, '')
       end
 
       # if any tokens remain, set joined remaining tokens as name, otherwise, set name to post_direction, if set, and set post_direction to nil
@@ -79,9 +77,9 @@ module PeoplePlacesThings
       validate_parts
     end
   
-    # check for a valid street address, we assume at least a number or po_box and name is required.
+    # check for a valid street address, we assume at least a number or box_number and name is required.
     def valid?
-      !self.name.nil? && !(self.number.nil? && self.po_box.nil?)
+      !self.name.nil? && !(self.number.nil? && self.box_number.nil?)
     end
     
     def to_s
@@ -90,7 +88,6 @@ module PeoplePlacesThings
       parts << DIRECTIONS[self.pre_direction].first if self.pre_direction
       parts << ORDINALS[self.ordinal].first if self.ordinal
       parts << self.name if self.name
-      parts << self.po_box if self.po_box
       parts << SUFFIXES[self.suffix].first if self.suffix
       parts << DIRECTIONS[self.post_direction].first if self.post_direction
       parts << UNIT_TYPES[self.unit_type].first if self.unit_type
@@ -104,14 +101,20 @@ module PeoplePlacesThings
       parts = []
       parts << self.number.upcase if self.number
       parts << StreetAddress.string_for(self.pre_direction, :short).upcase if self.pre_direction
-      parts << StreetAddress.string_for(self.ordinal, :short).upcase if self.ordinal
-      parts << self.name.gsub(/[(,?!\'":.)]/, '').gsub(PO_BOX_PATTERN, 'PO BOX').upcase if self.name
-      parts << self.po_box if self.po_box
+      parts << StreetAddress.string_for(StreetAddress.find_token(self.ordinal, ORDINALS), :short).upcase if self.ordinal
+      canonical_name = self.name.gsub(/[(,?!\'":.#)]/, '').gsub(PO_BOX_PATTERN, 'PO BOX').upcase if self.name
+      canonical_name.gsub!(/(rr|r.r.)/i, 'RR') if canonical_name =~ RR_PATTERN 
+      # remove the original ordinal and box from the name, they are output in canonical form separately
+      canonical_name.gsub!(self.ordinal.upcase, '') if self.ordinal
+      canonical_name.gsub!(self.box_number, '') if self.box_number
+      parts << canonical_name.chomp(' ') if canonical_name
+      parts << self.box_number if self.box_number
       parts << StreetAddress.string_for(self.suffix, :short).upcase if self.suffix
       parts << StreetAddress.string_for(self.post_direction, :short).upcase if self.post_direction
       # make all unit type as the canoncial number "#"
       parts << StreetAddress.string_for(:number, :short).upcase if self.unit_type
       parts << self.unit.upcase if self.unit
+      parts.delete('')
       parts.join(' ')      
     end
   
@@ -147,7 +150,7 @@ module PeoplePlacesThings
     end
   
     PO_BOX_PATTERN = /(p.o. box|p o box|post office box|po box)/i
-    RR_PATTERN = /rr[\s*]([#]\d+|\d+)(\s*-\s*|\s*)box[\s*]([#]\d+|\d+)/i
+    RR_PATTERN = /(rr|r.r.)\s*(#\d+|\d+)(\s*-\s*|\s*)box(\s*|\s*-\s*)(#\d+|\d+)/i
     
     # to_canonical_s uses the short version of each of the following
     # long version is in position 0
