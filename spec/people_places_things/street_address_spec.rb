@@ -173,7 +173,7 @@ describe StreetAddress do
     addr.name.should == "PO Box 111"
     addr.box_number.should == '111'
   end
-  
+    
   it "should parse box_number" do
     addr = StreetAddress.new "PO BOX 111"
     addr.box_number.should == "111"
@@ -187,6 +187,7 @@ describe StreetAddress do
   it "should output postal standard ordinals" do
     addr = StreetAddress.new "100 First St"
     addr.to_canonical_s.should == "100 1ST ST"
+    addr.to_s.should == "100 First street"
   end
   
   it "should output postal standard" do

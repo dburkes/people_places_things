@@ -86,7 +86,6 @@ module PeoplePlacesThings
       parts = []
       parts << self.number if self.number
       parts << DIRECTIONS[self.pre_direction].first if self.pre_direction
-      parts << ORDINALS[self.ordinal].first if self.ordinal
       parts << self.name if self.name
       parts << SUFFIXES[self.suffix].first if self.suffix
       parts << DIRECTIONS[self.post_direction].first if self.post_direction
