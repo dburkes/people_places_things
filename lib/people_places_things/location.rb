@@ -16,7 +16,10 @@ module PeoplePlacesThings
       #
       3.times do |i|
         self.state = State.new(tokens.last(i).join(" ")) rescue nil
-        tokens = tokens.slice(0..(-1 - i)) if self.state
+        if self.state
+          tokens = tokens.slice(0..(-1 - i))
+          break
+        end
       end
       
       # remainder must be city
