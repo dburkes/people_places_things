@@ -17,6 +17,18 @@ describe Location do
     test_location("san francisco, ca", "san francisco", "CA", nil)
   end
   
+  it "should parse city comma full state" do
+    test_location("new york, new york", "new york", "NY", nil)
+  end
+  
+  it "should parse city comma full state zip" do
+    test_location("new york, new york 10016", "new york", "NY", "10016")
+  end
+  
+  it "should parse city full state zip" do
+    test_location("new york new york 10016", "new york", "NY", "10016")
+  end
+  
   it "should parse city state zip" do
     test_location("san francisco ca 94114-1212", "san francisco", "CA", '94114-1212')
   end
