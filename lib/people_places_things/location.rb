@@ -5,18 +5,23 @@ module PeoplePlacesThings
     def initialize(str)
       self.raw = str
     
-      tokens = str.split(/\s|,/).collect {|t| t.strip}
+      tokens = str.split(/\s|,/).collect { |t| t.strip }.reject { |t| t.length == 0 }
     
       # try to parse last token as zip
       #
       self.zip = ZipCode.new(tokens.last) rescue nil
       tokens = tokens.slice(0..-2) if self.zip
-    
-      # try to parse last token as state
+      
+      # try to parse out the state (california, new york, district of columbia)
       #
-      self.state = State.new(tokens.last) rescue nil
-      tokens = tokens.slice(0..-2) if self.state
-    
+      3.times do |i|
+        self.state = State.new(tokens.last(i).join(" ")) rescue nil
+        if self.state
+          tokens = tokens.slice(0..(-1 - i))
+          break
+        end
+      end
+      
       # remainder must be city
       #
       self.city = tokens.join(' ').strip

@@ -8,6 +8,10 @@ describe Location do
   it "should parse city state abbreviation" do
     test_location("san francisco ca", "san francisco", "CA", nil)
   end
+  
+  it "should parse city comma state abbr" do
+    test_location("marlboro, nj", "marlboro", "NJ", nil)
+  end
 
   it "should parse city state full" do
     test_location("san francisco california", "san francisco", "CA", nil)
@@ -15,6 +19,18 @@ describe Location do
 
   it "should parse city comma state" do
     test_location("san francisco, ca", "san francisco", "CA", nil)
+  end
+  
+  it "should parse city comma full state" do
+    test_location("new york, new york", "new york", "NY", nil)
+  end
+  
+  it "should parse city comma full state zip" do
+    test_location("new york, new york 10016", "new york", "NY", "10016")
+  end
+  
+  it "should parse city full state zip" do
+    test_location("new york new york 10016", "new york", "NY", "10016")
   end
   
   it "should parse city state zip" do
