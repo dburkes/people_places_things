@@ -44,6 +44,10 @@ describe Location do
   it "should parse city zip" do
     test_location("san francisco 94114-1212", "san francisco", nil, '94114-1212')
   end
+
+  it "should parse state with three words" do
+    test_location("district of columbia", nil, 'DC', nil)
+  end
   
   it "should parse state zip" do
     test_location("ca 94114-1212", nil, "CA", '94114-1212')
