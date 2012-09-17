@@ -14,7 +14,7 @@ module PeoplePlacesThings
       
       # try to parse out the state (california, new york, district of columbia)
       #
-      3.times do |i|
+      4.times do |i|
         self.state = State.new(tokens.last(i).join(" ")) rescue nil
         if self.state
           tokens = tokens.slice(0..(-1 - i))
