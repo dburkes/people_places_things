@@ -14,46 +14,9 @@ module PeoplePlacesThings
       parts = str.split(/\s|,/).collect {|p| p.strip}.reject {|p| PersonName.blank?(p) || p == ',' }
   
       if parts.size == 1
-        self.last = parts.first
+        handle_single_word(fmt, parts)
       else
-        case fmt
-          when :first_middle_last
-            if parts.size > 2 && SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts.last) == 0}
-              self.suffix = PersonName.normalize_suffix(parts.last)
-              parts.delete_at(parts.size - 1)
-            end
-        
-            self.first = parts.first if parts.size > 0
-            self.last = parts.last if parts.size > 1
-        
-            if parts.size > 2 && ODD_LAST_NAME_PREFIXES.detect {|s| s.casecmp(parts[-2]) == 0}
-              self.last = "#{parts[-2]}#{self.last}"
-              parts.delete_at(parts.size - 2)
-            end
-            
-            self.middle = parts[1..(parts.size - 2)].join(' ') if parts.size > 2
-    
-          when :last_first_middle
-            self.last = parts.first if parts.size > 0
-        
-            if parts.size > 1 && ODD_LAST_NAME_PREFIXES.detect {|s| s.casecmp(self.last) == 0}
-              self.last << parts[1]
-              parts.delete_at(1)
-            end
-
-            if parts.size > 2
-              if SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts[1]) == 0}
-                self.suffix = PersonName.normalize_suffix(parts[1])
-                parts.delete_at(1)
-              elsif SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts.last) == 0}
-                self.suffix = PersonName.normalize_suffix(parts.last)
-                parts = parts[0..-2]
-              end
-            end
-
-            self.first = parts[1] if parts.size > 1
-            self.middle = parts[2..(parts.size - 1)].join(' ') if parts.size > 2
-        end
+        handle_multiple_words(fmt, parts)
       end
     end
   
@@ -80,7 +43,7 @@ module PeoplePlacesThings
           [self.last, self.first].compact.join(',')
       
         when :last_comma_space_first
-          [(self.first ? "#{self.last}," : self.last), self.first].compact.join(' ')
+          [(self.first and self.last ? "#{self.last}," : self.last), self.first].compact.join(' ')
       end
     end
 
@@ -95,7 +58,7 @@ module PeoplePlacesThings
     def last_i
       self.last[0,1] rescue nil
     end
-  
+
     def eql?(other, initials_only=false)
       if other.is_a?(PersonName)
         [:first, :middle, :last].all? do |k|
@@ -106,11 +69,67 @@ module PeoplePlacesThings
         end
       end
     end
-  
+
     PARSE_FORMATS = [:first_middle_last, :last_first_middle, :auto_detect]
     OUTPUT_FORMATS = [:first, :middle, :last, :full, :full_reverse, :first_space_last, :last_space_first, :last_comma_first, :last_comma_space_first]
 
     private
+
+    def handle_single_word(format, parts)
+      if format == :first_middle_last
+        self.first = parts.first
+      else
+        self.last = parts.first
+      end
+    end
+
+    def handle_multiple_words(format, parts)
+      case format
+        when :first_middle_last
+          use_first_middle_last(parts)
+        when :last_first_middle
+          use_last_first_middle(parts)
+      end
+    end
+
+    def use_first_middle_last(parts)
+      if parts.size > 2 && SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts.last) == 0}
+        self.suffix = PersonName.normalize_suffix(parts.last)
+        parts.delete_at(parts.size - 1)
+      end
+
+      self.first = parts.first if parts.size > 0
+      self.last = parts.last if parts.size > 1
+
+      if parts.size > 2 && ODD_LAST_NAME_PREFIXES.detect {|s| s.casecmp(parts[-2]) == 0}
+        self.last = "#{parts[-2]}#{self.last}"
+        parts.delete_at(parts.size - 2)
+      end
+
+      self.middle = parts[1..(parts.size - 2)].join(' ') if parts.size > 2
+    end
+
+    def use_last_first_middle(parts)
+      self.last = parts.first if parts.size > 0
+
+      if parts.size > 1 && ODD_LAST_NAME_PREFIXES.detect {|s| s.casecmp(self.last) == 0}
+        self.last << parts[1]
+        parts.delete_at(1)
+      end
+
+      if parts.size > 2
+        if SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts[1]) == 0}
+          self.suffix = PersonName.normalize_suffix(parts[1])
+          parts.delete_at(1)
+        elsif SUPPORTED_SUFFIXES.detect {|s| s.casecmp(parts.last) == 0}
+          self.suffix = PersonName.normalize_suffix(parts.last)
+          parts = parts[0..-2]
+        end
+      end
+
+      self.first = parts[1] if parts.size > 1
+      self.middle = parts[2..(parts.size - 1)].join(' ') if parts.size > 2
+    end
 
     def self.blank?(string_or_nil)
       string_or_nil.nil? || string_or_nil !~ /\S/

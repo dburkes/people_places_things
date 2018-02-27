@@ -15,11 +15,11 @@ describe PersonName do
     name.last.should == 'peabody'
   end
   
-  it "should parse last only in first_middle_last format" do
+  it "should parse first only in first_middle_last format" do
     name = PersonName.new "peabody", :first_middle_last
-    name.first.should == nil
+    name.last.should == nil
     name.middle.should == nil
-    name.last.should == 'peabody'
+    name.first.should == 'peabody'
   end
   
   it "should parse last only in last_first_middle format" do
